@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>취약한 댓글 서비스</title>
+</head>
+<body>
+<h1>댓글 남기기 ✍️</h1>
+<form action="/add" method="post">
+    이름: <input type="text" name="author" required> <br>
+    내용: <textarea name="content" required></textarea> <br>
+    <button type="submit">댓글 작성</button>
+</form>
+
+<hr>
+
+<h2>댓글 목록 💬</h2>
+<div th:each="comment : ${comments}">
+    <p>
+        <strong>작성자: <span th:text="${comment.author}"></span></strong>
+    </p>
+    <p th:utext="${comment.content}"></p>
+    <hr>
+</div>
+</body>
+</html>
