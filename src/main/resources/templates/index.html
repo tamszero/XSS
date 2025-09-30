@@ -1,94 +1,257 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>취약한 댓글 서비스</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <style>
-        body {
-            font-family: "Pretendard", "Noto Sans KR", sans-serif;
-            background: #f4f6f9;
-            margin: 0;
-            padding: 20px;
+        :root{
+            --bg:#f4f6f9;
+            --card:#ffffff;
+            --primary:#4a90e2;
+            --muted:#6b7280;
+            --radius:12px;
+            --glass: rgba(255,255,255,0.6);
+            --maxw:900px;
+            --gap:16px;
         }
-        h1, h2 {
-            text-align: center;
-            color: #333;
+        html,body{height:100%;margin:0;font-family:"Pretendard","Noto Sans KR",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;}
+        body{
+            background: linear-gradient(180deg,#f7f9fc 0%, var(--bg) 100%);
+            display:flex;
+            align-items:flex-start;
+            justify-content:center;
+            padding:36px 20px;
+            color:#222;
         }
-        form {
-            max-width: 600px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        .container{
+            width:100%;
+            max-width:var(--maxw);
+            box-sizing:border-box;
         }
-        form input, form textarea {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            margin-bottom: 16px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: 0.2s;
+        header{
+            text-align:center;
+            margin-bottom:20px;
         }
-        form input:focus, form textarea:focus {
-            border-color: #4a90e2;
-            outline: none;
-            box-shadow: 0 0 6px rgba(74,144,226,0.3);
+        header h1{
+            margin:0;
+            font-size:28px;
+            letter-spacing:-0.4px;
         }
-        form button {
-            background: #4a90e2;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.3s;
+        header p{
+            margin:6px 0 0;
+            color:var(--muted);
         }
-        form button:hover {
-            background: #357abd;
+
+        /* layout */
+        .layout{
+            display:grid;
+            grid-template-columns: 1fr 380px;
+            gap:24px;
         }
-        .comment-section {
-            max-width: 600px;
-            margin: 30px auto;
+        @media (max-width:880px){
+            .layout{grid-template-columns: 1fr; padding:0;}
         }
-        .comment {
-            background: #fff;
-            padding: 16px 20px;
-            margin-bottom: 16px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+        /* left: main feed */
+        .main {
+            display:flex;
+            flex-direction:column;
+            gap:var(--gap);
         }
-        .comment strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
+
+        /* search box (placed in right column originally but we show top inside main for small screens) */
+        .search-card{
+            background:var(--card);
+            border-radius:var(--radius);
+            padding:14px;
+            box-shadow:0 6px 18px rgba(30,41,59,0.06);
+            display:flex;
+            gap:10px;
+            align-items:center;
+            flex-wrap:wrap;
         }
-        .comment p {
-            margin: 0;
-            color: #333;
-            line-height: 1.6;
+        .search-card form{display:flex; gap:8px; width:100%; align-items:center;}
+        .search-card input[type="text"]{
+            flex:1;
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid #e6e9ef;
+            font-size:14px;
+        }
+        .search-card button{
+            padding:10px 14px;
+            border-radius:10px;
+            border:none;
+            background:var(--primary);
+            color:white;
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        /* compose card */
+        .compose{
+            background:var(--card);
+            padding:18px;
+            border-radius:var(--radius);
+            box-shadow:0 8px 24px rgba(30,41,59,0.04);
+        }
+        .compose label{display:block;font-size:13px;color:var(--muted); margin-bottom:6px;}
+        .compose input[type="text"],
+        .compose textarea{
+            width:100%;
+            padding:12px;
+            border-radius:10px;
+            border:1px solid #e6e9ef;
+            font-size:14px;
+            box-sizing:border-box;
+            resize:vertical;
+        }
+        .compose textarea{min-height:110px;}
+        .compose .actions{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-top:12px;
+            gap:10px;
+        }
+        .compose button{
+            background:var(--primary);
+            color:white;
+            border:none;
+            padding:10px 16px;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        /* right column: info & quick actions */
+        .sidebar{
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+        }
+        .card{
+            background:var(--card);
+            border-radius:12px;
+            padding:14px;
+            box-shadow:0 6px 18px rgba(30,41,59,0.04);
+        }
+        .muted{color:var(--muted); font-size:13px;}
+
+        /* comments list */
+        .comment-list{display:flex;flex-direction:column;gap:12px;}
+        .comment{
+            background:linear-gradient(180deg, rgba(255,255,255,1), rgba(250,251,253,1));
+            padding:14px;
+            border-radius:12px;
+            border:1px solid #f0f2f6;
+            box-shadow:0 2px 6px rgba(12,20,40,0.03);
+        }
+        .comment .meta{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:8px;
+            gap:8px;
+        }
+        .comment .author{font-weight:700; color:#222;}
+        .comment .time{font-size:12px;color:var(--muted);}
+
+        .comment .content{
+            margin:0;
+            color:#333;
+            line-height:1.55;
+            white-space:pre-wrap;
+        }
+
+        /* search result line */
+        .search-result {
+            margin-top:8px;
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px dashed #e6eefc;
+            background:linear-gradient(90deg, rgba(74,144,226,0.03), rgba(255,255,255,0));
+            color:#0f172a;
+            font-size:14px;
+        }
+
+        footer{
+            text-align:center;
+            margin-top:26px;
+            color:var(--muted);
+            font-size:13px;
         }
     </style>
 </head>
 <body>
-<h1>💬 댓글 남기기</h1>
-<form action="/add" method="post">
-    <label>이름</label>
-    <input type="text" name="author" required>
-    <label>내용</label>
-    <textarea name="content" rows="4" required></textarea>
-    <button type="submit">댓글 작성</button>
-</form>
+<div class="container">
+    <header>
+        <h1>💬 취약한 댓글 서비스</h1>
+    </header>
 
-<div class="comment-section">
-    <h2>📝 댓글 목록</h2>
-    <div th:each="comment : ${comments}" class="comment">
-        <strong>작성자: <span th:text="${comment.author}"></span></strong>
-        <p th:utext="${comment.content}"></p>
+    <div class="layout">
+        <!-- left column: search + compose + comments -->
+        <div class="main">
+            <!-- Search (visible at top of main for small screens) -->
+            <div class="search-card">
+                <form action="/" method="GET">
+                    <input type="text" name="search" placeholder="검색어를 입력하세요" />
+                    <button type="submit">검색</button>
+                </form>
+            </div>
+
+            <!-- optional display of the search keyword (Thymeleaf) -->
+            <div th:if="${searchKeyword}" class="card">
+                <div class="search-result">
+                    당신이 검색한 키워드: <span th:utext="${searchKeyword}"></span>
+                </div>
+            </div>
+
+            <!-- compose -->
+            <div class="compose">
+                <form action="/add" method="post">
+                    <label for="author">이름</label>
+                    <input id="author" type="text" name="author" required />
+
+                    <label for="content">내용</label>
+                    <textarea id="content" name="content" required></textarea>
+
+                    <div class="actions">
+                        <button type="submit">댓글 작성</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- comments list -->
+            <section class="card">
+                <h2 style="margin:0 0 12px 0;">📝 댓글 목록</h2>
+                <div class="comment-list">
+                    <div th:each="comment : ${comments}" class="comment">
+                        <div class="meta">
+                            <div class="author">작성자: <span th:text="${comment.author}"></span></div>
+                            <div class="time" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">2025-09-30 00:00</div>
+                        </div>
+                        <p class="content" th:utext="${comment.content}">댓글 내용</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- right column: helper / warnings -->
+        <aside class="sidebar">
+            <div class="card">
+                <strong>안내</strong>
+                <p class="muted" style="margin-top:8px;">
+                    XSS 학습용. 검색어나 댓글을 그대로 렌더링하는 기능은 의도적 취약점이 존재합니다.
+                </p>
+            </div>
+        </aside>
     </div>
+
+    <footer>
+        이비전 과제용
+    </footer>
 </div>
 </body>
 </html>
