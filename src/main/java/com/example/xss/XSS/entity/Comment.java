@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 public class Comment {
@@ -16,4 +18,6 @@ public class Comment {
     private String author;
     @Lob
     private String content;
+
+    private LocalDateTime createdAt;
 }

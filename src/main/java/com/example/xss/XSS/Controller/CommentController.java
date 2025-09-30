@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class CommentController {
@@ -18,8 +19,13 @@ public class CommentController {
     }
 
     @GetMapping("/")
-    public String ListComments(Model model){
+    public String ListComments(@RequestParam(required = false) String search, Model model){
         model.addAttribute("comments", commentRepository.findAll());
+
+        if(search != null && !search.isEmpty()){
+            //검색어를 searchKeyword라는 이름으로 모델에 추가
+            model.addAttribute("searchKeyword", search);
+        }
         return "index";
     }
 
