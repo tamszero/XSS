@@ -1,7 +1,11 @@
 # 취약한 댓글 서비스 - XSS 실습용
-<img width="939" height="679" alt="main" src="https://github.com/user-attachments/assets/db34caff-b7b9-4c65-a669-7895f815bdbc" />
+
 ## 프로젝트 설명
 간단한 댓글 서비스를 통해 Stored XSS, Reflected XSS 취약점을 재현한 웹 사이트 
+
+
+<img width="939" height="679" alt="main" src="https://github.com/user-attachments/assets/db34caff-b7b9-4c65-a669-7895f815bdbc" />
+
 
 ## 목적
 - XSS 취약점을 이해하고 재현
