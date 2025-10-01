@@ -39,5 +39,6 @@
 
 
 - Reflected 이기 때문에 DB에 저장되지는 않는 모습
-  <img width="482" height="117" alt="ref" src="https://github.com/user-attachments/assets/9a5b0cdb-4aa1-4e0a-ae88-9aa94b25eb6d" />
+
+<img width="482" height="117" alt="ref" src="https://github.com/user-attachments/assets/9a5b0cdb-4aa1-4e0a-ae88-9aa94b25eb6d" />
 
