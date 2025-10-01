@@ -229,11 +229,18 @@
                 <div class="comment-list">
                     <div th:each="comment : ${comments}" class="comment">
                         <div class="meta">
-                            <div class="author">작성자: <span th:text="${comment.author}"></span></div>
+                            <div class="author">
+                                작성자:
+                                <strong
+                                        th:attrappend="onclick='alert(\'' + ${comment.author} + '\')'"
+                                        style="cursor:pointer;"
+                                >
+                                    <span th:text="${comment.author}"></span>
+                                </strong>
+                            </div>
                             <div class="time" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">2025-09-30 00:00</div>
                         </div>
-                        <p class="content" th:utext="${comment.content}">댓글 내용</p>
-                    </div>
+                        <p class="content" th:utext="${comment.content}">댓글 내용</p> </div>
                 </div>
             </section>
         </div>
