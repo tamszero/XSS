@@ -1,5 +1,18 @@
-# XSS 취약점이 존재하는 웹 사이트
+# 취약한 댓글 서비스 - XSS 실습용
 <img width="939" height="679" alt="main" src="https://github.com/user-attachments/assets/db34caff-b7b9-4c65-a669-7895f815bdbc" />
+## 프로젝트 설명
+간단한 댓글 서비스를 통해 Stored XSS, Reflected XSS 취약점을 재현한 웹 사이트 
+
+## 목적
+- XSS 취약점을 이해하고 재현
+- 안전한 출력,인코딩 기법과 패치 등을 통해 보완
+
+## 요구환경
+- Java 17
+- Spring Boot
+- Gradle - Groovy
+- 기본 포트: 'http://localhost:8080 '
+
 
 ## <Stored XSS 실습 1>
 - 댓글 내용 입력 칸에 스크립트 공격문 삽입
